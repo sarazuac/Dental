@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use \Datetime;
 use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Facades\Auth;
 
 use DB;
 
@@ -24,20 +25,28 @@ class TimesheetController extends Controller
 
     public function getTimesheets(){
 
-            $timesheet = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id') ->get();
-            $response = [
-                'timesheets' => $timesheet
-            ];
-            return response()->json($response, 200);
+            $data = [];
+            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id') ->get();
+            // $response = [
+            //     'timesheets' => $timesheets
+            // ];
+            //return response()->json($response, 200);
+
+            $data['timesheets'] = $timesheets;
+            return view('timesheets', $data);
 
     }
-    public function getTimestampsByUser(Request $request, $user_id){
+    public function getTimestampsByUser(Request $request){
 
-        $timestamp = Timesheet::where('user_id', '=', $user_id)->get();;
-        $response = [
-            'timesheet' => $timesheet
-        ];
-        return response()->json($response, 200);
+        $data = [];
+        $timesheet = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')
+        ->where('user_id', '=', Auth::user()->id)
+        ->where('timesheets.clocked_in_at', '>=','2018-11-24 00:00:00')
+        ->orderBy('clocked_in_at', 'desc')->first();
+        
+        $data['timesheet'] = $timesheet;
+        //return response()->json($response, 200);
+        return view('mytimesheet', $data);
 
 }
     public function postClockIn(Request $request){
@@ -59,14 +68,18 @@ class TimesheetController extends Controller
         return response()->json(['timesheet' =>$timesheet], 201);
 
     }
-    public function postLunchIn(Request $request, $id){
+    public function putLunchIn(Request $request, $id){
+
+        echo $id;
         $timesheet = Timesheet::find($id);
         if(!$timesheet){
             return response()->json(['message' => 'Timesheet not found'], 404);
         }
         $timesheet->lunch_in_at = new DateTime();
         $timesheet->save();
-        return response()->json(['timesheet' => $timesheet], 200);
+        
+
+        return redirect('timesheet');
     }
     public function postLunchOut(Request $request, $id){
         $timesheet = Timesheet::find($id);

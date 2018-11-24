@@ -20,7 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/timestamps', 'TimestampController@getTimestamps')->name('timestamps');
+Route::get('/timesheets', 'TimesheetController@getTimesheets')->name('timesheets');
+
+Route::get('/timesheet', 'TimesheetController@getTimestampsByUser')->name('timesheet');
+
+
+Route::get('/lunchin/{id}', 'TimesheetController@putLunchIn')->name('lunchin');
+
+
 
 // $router->get('/timestamps', [
 //     'uses' => 'TimestampController@getTimestamps'
@@ -45,4 +52,4 @@ Route::get('/timestamps', 'TimestampController@getTimestamps')->name('timestamps
 //     'uses' => 'TimestampController@deleteTimestamp'
 // ]);
 
-Route::any('/{any}', 'HomeController@index')->where('any', '.*');
+// Route::any('/{any}', 'HomeController@index')->where('any', '.*');

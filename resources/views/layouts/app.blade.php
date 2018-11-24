@@ -43,12 +43,31 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 @if (Route::has('register'))
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
-                            </li>
+                            </li> --}}
                         @else
+
+                            <li class="nav-item">
+                               
+                                    <a class="nav-link" href="{{ route('timesheet') }}">{{ __('My Timesheet') }}</a>
+                               
+                            </li>
+                            <li class="nav-item">
+                               
+                                    <a class="nav-link" href="{{ route('timesheets') }}">{{ __('Timesheets') }}</a>
+                               
+                            </li>
+
+                            <li class="nav-item">
+                                @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Manager'))
+                                @if (Route::has('register'))
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register New Employee') }}</a>
+                                @endif
+                                @endif
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }} {{ Auth::user()->last_name  }} <span class="caret"></span>
@@ -71,11 +90,12 @@
                 </div>
             </div>
         </nav>
-        <main>
+        {{-- <main>
             @yield('App')
-        </main>
-        <main class="py-4">
+        </main> --}}
+        <main >
             @yield('content')
+            @yield('timesheets')
         </main>
         
     </div>
