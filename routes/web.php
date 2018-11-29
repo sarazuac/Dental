@@ -15,17 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes([
+
+    
+]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::middleware('auth')->get('/timesheets', 'TimesheetController@getTimesheets')->name('timesheets');
 
-Route::get('/timesheets', 'TimesheetController@getTimesheets')->name('timesheets');
+Route::middleware('auth')->get('/timesheet', 'TimesheetController@getTimestampsByUser')->name('timesheet');
 
-Route::get('/timesheet', 'TimesheetController@getTimestampsByUser')->name('timesheet');
+Route::middleware('auth')->get('/clockin', 'TimesheetController@postClockIn')->name('clockin');
 
-
-Route::get('/lunchin/{id}', 'TimesheetController@putLunchIn')->name('lunchin');
+Route::middleware('auth')->get('/lunchin/{id}', 'TimesheetController@putLunchIn')->name('lunchin');
 
 
 

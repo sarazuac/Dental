@@ -6,6 +6,7 @@ use App\Models\Timesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use \Datetime;
+use Carbon\Carbon;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,8 +41,9 @@ class TimesheetController extends Controller
 
         $data = [];
         $timesheet = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')
-        ->where('user_id', '=', Auth::user()->id)
-        ->where('timesheets.clocked_in_at', '>=','2018-11-24 00:00:00')
+        ->select('timesheets.id AS timesheet_id', 'users.*', 'timesheets.*')
+        ->where('timesheets.user_id', '=', Auth::user()->id)
+        ->where('timesheets.clocked_in_at', '>=',Carbon::today()->toDateString())
         ->orderBy('clocked_in_at', 'desc')->first();
         
         $data['timesheet'] = $timesheet;
@@ -52,17 +54,18 @@ class TimesheetController extends Controller
     public function postClockIn(Request $request){
 
         $timesheet = new Timesheet();
-        $timesheet->id = (string) Uuid::generate(4);
 
         $timesheet->clocked_in_at = new DateTime();
+        $timesheet->user_id = Auth::user()->id;
         $timesheet->save();
-        return response()->json($timesheet, 201);
+        // return response()->json($timesheet, 201);
+        return redirect('timesheet');
 
     }
     public function putClockIn(Request $request, $id){
 
         $timesheet = new Timesheet();
-        $timesheet->user_id = $request->input('user_id');
+        $timesheet->user_id = Auth::user()->id;
         $timesheet->clocked_in_at = new DateTime();        ;
         $timesheet->save();
         return response()->json(['timesheet' =>$timesheet], 201);
