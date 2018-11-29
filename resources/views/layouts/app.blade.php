@@ -18,8 +18,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @toastr_css
 </head>
 <body>
+       
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
@@ -100,4 +102,7 @@
         
     </div>
 </body>
+@jquery
+@toastr_js
+@toastr_render
 </html>

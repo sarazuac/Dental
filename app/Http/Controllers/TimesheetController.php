@@ -26,15 +26,17 @@ class TimesheetController extends Controller
 
     public function getTimesheets(){
 
-            $data = [];
-            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id') ->get();
-            // $response = [
-            //     'timesheets' => $timesheets
-            // ];
-            //return response()->json($response, 200);
+        $data = [];
 
-            $data['timesheets'] = $timesheets;
-            return view('timesheets', $data);
+        if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Manager')){
+            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->get();
+        }else{
+            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->where('timesheets.user_id', '=', Auth::user()->id)->get();
+        }
+    
+        $data['timesheets'] = $timesheets;
+
+        return view('timesheets', $data);
 
     }
     public function getTimestampsByUser(Request $request){
@@ -52,55 +54,84 @@ class TimesheetController extends Controller
 
 }
     public function postClockIn(Request $request){
+        try{
+            $timesheet = new Timesheet();
+            $timesheet->clocked_in_at = new DateTime();
+            $timesheet->user_id = Auth::user()->id;
+            $timesheet->save();
+            // return response()->json($timesheet, 201);
+            toastr()->success('Data has been saved successfully!');
 
-        $timesheet = new Timesheet();
-
-        $timesheet->clocked_in_at = new DateTime();
-        $timesheet->user_id = Auth::user()->id;
-        $timesheet->save();
-        // return response()->json($timesheet, 201);
-        return redirect('timesheet');
+        }catch(Exception $e){
+            toastr()->error('Opps! Something went wrong! Please Try Again.');
+            throw new Exception( "Example message." );
+        }finally{
+            return redirect('timesheet');
+        }
 
     }
     public function putClockIn(Request $request, $id){
 
-        $timesheet = new Timesheet();
-        $timesheet->user_id = Auth::user()->id;
-        $timesheet->clocked_in_at = new DateTime();        ;
-        $timesheet->save();
-        return response()->json(['timesheet' =>$timesheet], 201);
+        // try{
+        //     $timesheet = new Timesheet();
+        //     $timesheet->user_id = Auth::user()->id;
+        //     $timesheet->clocked_in_at = new DateTime();
+        //     $timesheet->save();
+
+        // }catch(Exception $e){
+
+        // }finally{
+        //     return redirect('timesheet');
+        // }
+
+        
+        // return response()->json(['timesheet' =>$timesheet], 201);
 
     }
+
     public function putLunchIn(Request $request, $id){
 
-        echo $id;
-        $timesheet = Timesheet::find($id);
-        if(!$timesheet){
-            return response()->json(['message' => 'Timesheet not found'], 404);
-        }
-        $timesheet->lunch_in_at = new DateTime();
-        $timesheet->save();
-        
+        try{
+            $timesheet = Timesheet::find($id);
+            $timesheet->lunch_in_at = new DateTime();
+            $timesheet->save();
+            
+            toastr()->success('Data has been saved successfully!');
 
-        return redirect('timesheet');
+        }catch(Exception $e){
+            toastr()->error('Opps! Something went wrong! Please Try Again.');
+            throw new Exception( "Example message." );
+        }finally{
+            return redirect('timesheet');
+        }
+
+        // $timesheet = Timesheet::find($id);
+        // $timesheet->lunch_in_at = new DateTime();
+        // saveTimesheetWithToastr($timesheet);
+
+
     }
-    public function postLunchOut(Request $request, $id){
+    public function putLunchOut(Request $request, $id){
         $timesheet = Timesheet::find($id);
         if(!$timesheet){
             return response()->json(['message' => 'Timesheet not found'], 404);
         }
         $timesheet->lunch_out_at = new DateTime();
         $timesheet->save();
-        return response()->json(['timesheet' => $timesheet], 200);
+        //return response()->json(['timesheet' => $timesheet], 200);
+        toastr()->success('Data has been saved successfully!');
+        return redirect('timesheet');
     }
-    public function postClockOut(Request $request, $id){
+    public function putClockOut(Request $request, $id){
         $timesheet = Timesheet::find($id);
         if(!$timesheet){
             return response()->json(['message' => 'Timesheet not found'], 404);
         }
         $timesheet->clocked_out_at = new DateTime();
         $timesheet->save();
-        return response()->json(['timesheet' => $timesheet], 200);
+        // return response()->json(['timesheet' => $timesheet], 200);
+        toastr()->success('Data has been saved successfully!');
+        return redirect('timesheet');
     }
     public function deleteTimesheet(Request $request, $id){
         $timesheet = Timesheet::find($id);
@@ -112,7 +143,22 @@ class TimesheetController extends Controller
     }
 
 
+    private function saveTimesheetWithToastr(Timesheet $t){
 
+        try{
+          
+            $timesheet->save();
+            
+            toastr()->success('Data has been saved successfully!');
+
+        }catch(Exception $e){
+            toastr()->error('Opps! Something went wrong! Please Try Again.');
+            throw new Exception( "Example message." );
+        }finally{
+            return redirect('timesheet');
+        }
+
+    }
 
 
 

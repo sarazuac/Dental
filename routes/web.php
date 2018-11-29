@@ -30,6 +30,10 @@ Route::middleware('auth')->get('/clockin', 'TimesheetController@postClockIn')->n
 
 Route::middleware('auth')->get('/lunchin/{id}', 'TimesheetController@putLunchIn')->name('lunchin');
 
+Route::middleware('auth')->get('/lunchout/{id}', 'TimesheetController@putLunchOut')->name('lunchout');
+
+Route::middleware('auth')->get('/clockout/{id}', 'TimesheetController@putClockOut')->name('clockout');
+
 
 
 // $router->get('/timestamps', [
