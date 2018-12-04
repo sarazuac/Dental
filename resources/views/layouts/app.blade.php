@@ -10,14 +10,20 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+
+    <script src="{{ asset('js/main.js') }}" defer></script>
+
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+ 
     @toastr_css
 </head>
 <body>
@@ -54,12 +60,12 @@
 
                             <li class="nav-item">
                                
-                                    <a class="nav-link" href="{{ route('timesheet') }}">{{ __('My Timesheet') }}</a>
+                                    <a class="nav-link" href="{{ route('timesheet') }}">{{ __('Todays Timesheet') }}</a>
                                
                             </li>
                             <li class="nav-item">
                                
-                                    <a class="nav-link" href="{{ route('timesheets') }}">{{ __('Timesheets') }}</a>
+                                    <a class="nav-link" href="{{ route('timesheets') }}">{{ __('My Timesheets') }}</a>
                                
                             </li>
 
@@ -105,4 +111,7 @@
 @jquery
 @toastr_js
 @toastr_render
+
+
 </html>
+

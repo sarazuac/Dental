@@ -29,9 +29,9 @@ class TimesheetController extends Controller
         $data = [];
 
         if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Manager')){
-            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->get();
+            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->select('timesheets.id AS timesheet_id', 'users.*', 'timesheets.*')->paginate(5);
         }else{
-            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->where('timesheets.user_id', '=', Auth::user()->id)->get();
+            $timesheets = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')->select('timesheets.id AS timesheet_id', 'users.*', 'timesheets.*')->where('timesheets.user_id', '=', Auth::user()->id)->paginate(5);
         }
     
         $data['timesheets'] = $timesheets;
@@ -39,7 +39,33 @@ class TimesheetController extends Controller
         return view('timesheets', $data);
 
     }
-    public function getTimestampsByUser(Request $request){
+
+    public function putTimesheet(Request $request){
+
+
+        $data = [];
+        try{
+            $timesheet = Timesheet::find($request->id);
+            $timesheet->clocked_in_at = $request->clocked_in_at;
+            $timesheet->lunch_in_at = $request->lunch_in_at;
+            $timesheet->lunch_out_at = $request->lunch_out_at;
+            $timesheet->clocked_out_at = $request->clocked_out_at;
+            $timesheet->save();
+            
+            toastr()->success('Data has been saved successfully!');
+
+        }catch(Exception $e){
+            toastr()->error('Opps! Something went wrong! Please Try Again.');
+            throw new Exception( "Example message." );
+        }finally{
+            return redirect('timesheets');
+        }
+
+       
+
+    }
+
+    public function getTimesheetsByUser(Request $request){
 
         $data = [];
         $timesheet = DB::table('timesheets')->join('users', 'timesheets.user_id', '=', 'users.id')

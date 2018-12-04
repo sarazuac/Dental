@@ -22,9 +22,18 @@ Auth::routes([
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// Route::group(['middleware' => 'can:accessAdmin'], function() {
+  
+//     // future adminpanel routes also should belong to the group
+// });
+
 Route::middleware('auth')->get('/timesheets', 'TimesheetController@getTimesheets')->name('timesheets');
 
-Route::middleware('auth')->get('/timesheet', 'TimesheetController@getTimestampsByUser')->name('timesheet');
+
+Route::middleware('auth')->get('/timesheet', 'TimesheetController@getTimesheetsByUser')->name('timesheet');
+
+
+Route::middleware('auth')->put('/timesheet/edit', 'TimesheetController@putTimesheet')->name('timesheet edit');
 
 Route::middleware('auth')->get('/clockin', 'TimesheetController@postClockIn')->name('clockin');
 
