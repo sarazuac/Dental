@@ -33,7 +33,7 @@ Route::middleware('auth')->get('/timesheets', 'TimesheetController@getTimesheets
 Route::middleware('auth')->get('/timesheet', 'TimesheetController@getTimesheetsByUser')->name('timesheet');
 
 
-Route::middleware('auth')->put('/timesheet/edit', 'TimesheetController@putTimesheet')->name('timesheet edit');
+Route::middleware('auth')->post('/timesheet/edit', 'TimesheetController@putTimesheet')->name('timesheet edit');
 
 Route::middleware('auth')->get('/clockin', 'TimesheetController@postClockIn')->name('clockin');
 

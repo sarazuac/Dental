@@ -48,8 +48,9 @@
     <div class="row">
             <div class="col-md-12">No Date Today</div>
     </div>
-    @endif
     
+    @endif
+    <br>
     <div class="row">
         {{-- //{{ $timesheet->lunch_in_at != null ? '' : 'disabled' }} --}}
   

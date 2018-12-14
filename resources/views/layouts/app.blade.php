@@ -98,6 +98,9 @@
                 </div>
             </div>
         </nav>
+        {{-- @jquery --}}
+@toastr_js
+@toastr_render
         {{-- <main>
             @yield('App')
         </main> --}}
@@ -108,9 +111,7 @@
         
     </div>
 </body>
-@jquery
-@toastr_js
-@toastr_render
+
 
 
 </html>
