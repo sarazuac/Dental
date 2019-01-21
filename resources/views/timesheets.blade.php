@@ -13,7 +13,7 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
-<div class="container">
+<div class="container-fluid">
         @if (isset($timesheets))
         {{-- {{var_dump($timesheets)}} --}}
 {{-- 
@@ -22,11 +22,17 @@
     <div class="col-md-3"><input type='date'/></div>
     <div class="col-md-3"><input type='date'/></div>
 </div> --}}
+<style>
+td input{
+    width:100%;
+}
+
+</style>
 <br>
         <div class="row">  
 
         
-    <table class="table table-bordered table-hover " style="margin-top:20px">
+    <table class="table table-bordered table-hover" style="margin:20px 10%">
         <thead class="thead-dark">
             <tr>
                 <th>Name</th>
@@ -45,10 +51,10 @@
 
                             <tr class="{{ $row->marked_for_review ==1 ? 'table-danger' : '' }}">
                                 <td>{{ $row->first_name }} {{ $row->last_name }}</td>
-                                <td>{{ (isset($row->clocked_in_at)) ? \Carbon\Carbon::parse($row->clocked_in_at)->toDayDateTimeString() : ' -- ' }}</td>
-                                <td>{{ (isset($row->lunch_in_at)) ? \Carbon\Carbon::parse($row->lunch_in_at)->toDayDateTimeString() : ' -- ' }}</td>
-                                <td>{{ (isset($row->lunch_out_at)) ? \Carbon\Carbon::parse($row->lunch_out_at)->toDayDateTimeString() : ' -- ' }}</td>
-                                <td>{{ (isset($row->clocked_out_at)) ? \Carbon\Carbon::parse($row->clocked_out_at)->toDayDateTimeString() : ' -- ' }}</td>
+                                <td>{{ (isset($row->clocked_in_at)) ? \Carbon\Carbon::parse($row->clocked_in_at)->format('F j\\, Y h:i:s A') : ' -- ' }}</td>
+                                <td>{{ (isset($row->lunch_in_at)) ? \Carbon\Carbon::parse($row->lunch_in_at)->format('F j\\, Y h:i:s A') : ' -- ' }}</td>
+                                <td>{{ (isset($row->lunch_out_at)) ? \Carbon\Carbon::parse($row->lunch_out_at)->format('F j\\, Y h:i:s A') : ' -- ' }}</td>
+                                <td>{{ (isset($row->clocked_out_at)) ? \Carbon\Carbon::parse($row->clocked_out_at)->format('F j\\, Y h:i:s A') : ' -- ' }}</td>
                                 <td>{{ $row->marked_for_review }}</td>
                                 @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Manager'))
                                 <td><button class="btn btn-info timesheet-edit" data-rowid="{{$row->id}}">Edit</button> </td>
