@@ -59,14 +59,17 @@
                                 {{csrf_field()}}
                                 <tr class="table-info erows d-none edit_{{$row->timesheet_id}}">
                                     <td><input type="hidden" name="id" value="{{ $row->timesheet_id }}"/></td>
-                                    <td> <div class="form-group">
-                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-                                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    <td>
+                                        <input type="text" name="clocked_in_at" value="{{ $row->clocked_in_at }}"/> 
+                                        {{-- <div class="form-group">
+                                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div></td>
+                                        </div> --}}
+                                    </td>
                                     <td><input type="text" name="lunch_in_at" value="{{ $row->lunch_in_at }}"/></td>
                                     <td><input type="text" name="lunch_out_at" value="{{ $row->lunch_out_at }}"/></td>
                                     <td><input type="text" name="clocked_out_at" value="{{ $row->clocked_out_at }}"/></td>
